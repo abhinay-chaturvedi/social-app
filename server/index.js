@@ -23,25 +23,39 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
 const app=express();
-app.use(express.json());
+// app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}));
 app.use(morgan("common"));
-app.use(bodyParser.json({limit:"30mb",extented:true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({limit:"30mb",extended:true}));
 app.use("/assets",express.static(path.join(__dirname,'public/assets')));
-
+console.log(path.join(__dirname,'public/assets'))
+app.use(cors());
 //file storage 
 const storage =multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,"pubilc/assets");
+        console.log(req.body);
+        cb(null,"public/assets");
     },
     filename:function(req,file,cb){
         cb(null,file.originalname)
     }
 })
 const upload=multer({storage});
-
+/**
+ *  @api {post} /auth/register register user in website
+ * @apiName registerUser
+ * @apiGroup Register
+ *  @apiBody {String} firstName  user name
+ * @apiBody {String} lastName user lastname
+ * @apiBody {String} location user location
+ * @apiBody {String} occupation user occupation
+ * @apiBody {String} email user email
+ * @apiBody {String} password user password
+ * @apiBody {String} picturePath user password
+ */
 app.post("/auth/register",upload.single("picture"),register);
 app.post("/posts",verfyToken,upload.single("picture"),createPost);
 /* ROUTES */
@@ -49,7 +63,7 @@ app.use("/auth",authRoutes);
 /*  user routes */
 app.use("/users",userRoutes);
 /*  post routes */
-app.use("/post",postRoutes);
+app.use("/posts",postRoutes);
 //mongoose setup
 const port=process.env.PORT || 6001;
 mongoose.set('strictQuery', false);

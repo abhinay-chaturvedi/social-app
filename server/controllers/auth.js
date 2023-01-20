@@ -37,9 +37,10 @@ export const register= async (req,res)=>{
 
 }
 export const login= async (req,res)=>{
-
+    // res.send("hello");
    try{
     const {email,password}=req.body;
+    console.log(req.body);
     const user=await User.findOne({email:email});
     if(!user){
         res.status(400).json({msg:"User does not exist. "});
@@ -47,7 +48,7 @@ export const login= async (req,res)=>{
         
         const isMatch=await bcrycpt.compare(password,user.password);
         if(isMatch){
-
+            
             const token = jwt.sign({id:user._id},process.env.JWT_SECRET)
             delete user.password;
             res.status(200).json({token,user});
