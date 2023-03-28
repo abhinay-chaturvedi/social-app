@@ -28,6 +28,7 @@ app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}));
 app.use(morgan("common"));
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({limit:"30mb",extended:true}));
 app.use("/assets",express.static(path.join(__dirname,'public/assets')));
@@ -36,7 +37,7 @@ app.use(cors());
 //file storage 
 const storage =multer.diskStorage({
     destination:function(req,file,cb){
-        console.log(req.body);
+        console.log(file);
         cb(null,"public/assets");
     },
     filename:function(req,file,cb){
