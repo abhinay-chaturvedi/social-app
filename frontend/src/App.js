@@ -8,7 +8,7 @@ import { themeSettings } from "./theme";
 import LoginPage from "./scenes/loginPage"
 import HomePage from "./scenes/homePage"
 import ProfilePage from "./scenes/profilePage"
-import NavBar from "./scenes/navbar";
+// import NavBar from "./scenes/navbar";
 function App() {
   const mode =useSelector((state)=>state.mode);
   const theme =useMemo(()=>createTheme(themeSettings(mode)),[mode])
